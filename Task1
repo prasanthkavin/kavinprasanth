@@ -1,0 +1,155 @@
+import re
+
+
+def menu():
+    print("Hai User \n"
+          "press 1 for Registration \n"
+          "press 2 for Login \n"
+          "press 3 for Forget Password")
+    num = int(input("Enter the preferred option : "))
+
+    if num == 1:
+        reg()
+    elif num == 2:
+        login()
+    elif num == 3:
+        fgt_pass()
+    else:
+        print("Enter a correct option : ")
+
+
+def reg():
+    user_name = input("Enter your name : ")
+
+    import re
+
+    spl_char = re.compile('[@_!#$%^&*()<>?/\|}{~:0-9A-Z]')
+
+    i = 0
+    # password (5 < password length > 16)
+    while i < 1:
+        user_emailid = input(f"{user_name} kindly enter your email id : ")
+        if user_emailid.find("@") != -1 and user_emailid.find(".") != -1 and user_emailid.find(
+                "@.") == -1 and spl_char.search(user_emailid[0]) == None:
+            print("Email is good!!!")
+            i = i + 1
+        else:
+            print("invalid email id")
+    # Must have minimum one special character,
+    # one digit,
+    # one uppercase,
+    #one lowercase character,
+    # import re
+
+    pwsd_splchar = re.compile('[@_!#$%^&*()<>?/\|}{~:]')
+    pwsd_num = re.compile('[0-9]')
+    pwsd_capz = re.compile('[A-Z]')
+    pwsd_small = re.compile('[a-z]')
+    i = 0
+
+    while i < 1:
+        user_password = input(f"{user_name} Kindly enter a password : ")
+
+        if 5 < len(user_password) and 16 > len(user_password) and pwsd_splchar.search(
+                user_password) != None and pwsd_num.search(user_password) != None and pwsd_capz.search(
+            user_password) != None and pwsd_small.search(user_password) != None:
+            print("You have created a unhackable password!!!")
+            print(f"congrats {user_name}!!!, you have created an account ")
+            i = i + 1
+        else:
+            print("invalid password")
+
+    # Saving the data
+    f = open("D:\\User_list.txt", 'a')
+    f.write(user_name + "," + user_emailid + "," + user_password + "\n")
+    f.close()
+
+
+def login():
+    import re
+    x = []
+    mail_input = input("Enter your mailid : ")
+    mail_check = re.compile(mail_input)
+    f = open("D:\\User_list.txt", 'r')
+    for line in f:
+        if mail_check.search(line) != None:
+            x = (line).split(",")
+            break
+    else:
+        print("invalid email")
+    password_input = input("Enter your password : ")
+    if (password_input + "\n") == x[2]:
+        print(f"Hello {x[0]}")
+        print("Login successful!!!!! ")
+    else:
+        print("invalid password")
+    f.close()
+
+
+def fgt_pass():
+    print("Press 1 to Know your password \n"
+          "Press 2 to reset your password")
+    num = int(input("Enter your preferred option : "))
+    if num == 1:
+        know_pass()
+    if num == 2:
+        reset_pass()
+
+
+def know_pass():
+    import re
+    name_input = input("Enter your registered user name : ")
+    name_check = re.compile(name_input)
+    x = []
+    f = open("D:\\User_list.txt", 'r')
+    for line in f:
+        if name_check.search(line) != None:
+            x = (line).split(",")
+            # print(x[2])
+            print(f"{x[2]}is your password")
+            break
+    else:
+        print("User name not found")
+    f.close
+
+
+def reset_pass():
+    import re
+
+    pwsd_splchar = re.compile('[@_!#$%^&*()<>?/\|}{~:]')
+    pwsd_num = re.compile('[0-9]')
+    pwsd_capz = re.compile('[A-Z]')
+    pwsd_small = re.compile('[a-z]')
+
+    name_input = input("Enter your registered user name : ")
+    name_check = re.compile(name_input)
+    x = []
+    f = open("D:\\User_list.txt", 'r')
+    for line in f:
+        if name_check.search(line) != None:
+            x = (line).split(",")
+            break
+    else:
+        print("Kindly register")
+
+    i = 0
+
+    while i < 1:
+        user_password = input(f"{x[0]} Kindly enter a password : ")
+
+        if 5 < len(user_password) and 16 > len(user_password) and pwsd_splchar.search(
+                user_password) != None and pwsd_num.search(user_password) != None and pwsd_capz.search(
+                user_password) != None and pwsd_small.search(user_password) != None:
+            print(f"congrats {x[0]}!!!, your password has been updated ")
+            i = i + 1
+        else:
+            print("invalid password")
+
+    with open(r"D:\\User_list.txt", 'r') as f:
+        data = f.read()
+        data = data.replace(x[2],user_password)
+    with open(r"D:\\User_list.txt", "w") as f:
+        f.write(data)
+    f.close
+
+menu()
